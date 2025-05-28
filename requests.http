@@ -1,0 +1,30 @@
+@base_url = http://localhost:3000
+
+### Create a new client 
+### @name client
+POST {{base_url}}/clients
+Content-Type: application/json
+
+{
+    "name": "Vinícius Boscardin"
+}
+
+### Create a new product
+@name product
+POST {{base_url}}/products
+Content-Type: application/json
+
+{
+    "name": "Product 12",
+    "price": 1000
+}
+
+### Create a new budget
+### @name budget
+POST {{base_url}}/budgets
+Content-Type: application/json
+
+{
+    "client_id": {{client.response.body.$.id}},
+    "product_id": {{product.response.body.id}}
+}
