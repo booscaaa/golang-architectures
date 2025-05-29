@@ -21,15 +21,20 @@ func (controller *createClientController) Execute(response http.ResponseWriter, 
 		http.Error(response, err.Error(), http.StatusBadRequest)
 		return
 	}
+
 	output, err := controller.createClientUseCase.Execute(ctx, input)
 	if err != nil {
-		response.WriteHeader(http.StatusBadRequest)
-		response.Write([]byte(err.Error()))
+		http.Error(response, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	response.Header().Set("Content-Type", "application/json")
 	response.WriteHeader(http.StatusCreated)
-	json.NewEncoder(response).Encode(output)
+	err = json.NewEncoder(response).Encode(output)
+	if err != nil {
+		http.Error(response, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 func NewCreateClientController(createClientUseCase contract.CreateClientUseCase) contract.CreateClientController {
