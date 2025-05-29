@@ -24,9 +24,15 @@ func Initialize(database postgres.Database) {
 	deleteProductController := di.NewDeleteProductController(database)
 	listProductsController := di.NewListProductsController(database)
 
+	// Service controllers
+	createServiceController := di.NewCreateServiceController(database)
+	getServiceController := di.NewGetServiceController(database)
+	updateServiceController := di.NewUpdateServiceController(database)
+	deleteServiceController := di.NewDeleteServiceController(database)
+	listServicesController := di.NewListServicesController(database)
+
 	// Other controllers
 	createBudgetController := di.NewCreateBudgetController(database)
-	createServiceController := di.NewCreateServiceController(database)
 
 	router := chi.NewRouter()
 
@@ -44,9 +50,15 @@ func Initialize(database postgres.Database) {
 	router.Put("/products/{id}", updateProductController.Execute)
 	router.Delete("/products/{id}", deleteProductController.Execute)
 
+	// Service routes - CRUD complete
+	router.Post("/services", createServiceController.Execute)
+	router.Get("/services", listServicesController.Execute)
+	router.Get("/services/{id}", getServiceController.Execute)
+	router.Put("/services/{id}", updateServiceController.Execute)
+	router.Delete("/services/{id}", deleteServiceController.Execute)
+
 	// Other routes
 	router.Post("/budgets", createBudgetController.Execute)
-	router.Post("/services", createServiceController.Execute)
 
 	fmt.Println("Server running on port 3000")
 	http.ListenAndServe(":3000", router)

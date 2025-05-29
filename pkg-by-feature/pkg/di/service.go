@@ -15,3 +15,35 @@ func NewCreateServiceController(database postgres.Database) contract.CreateServi
 		),
 	)
 }
+
+func NewGetServiceController(database postgres.Database) contract.GetServiceController {
+	return controller.NewGetServiceController(
+		usecase.NewGetServiceUseCase(
+			repository.NewGetServiceDatabaseRepository(database),
+		),
+	)
+}
+
+func NewUpdateServiceController(database postgres.Database) contract.UpdateServiceController {
+	return controller.NewUpdateServiceController(
+		usecase.NewUpdateServiceUseCase(
+			repository.NewUpdateServiceDatabaseRepository(database),
+		),
+	)
+}
+
+func NewDeleteServiceController(database postgres.Database) contract.DeleteServiceController {
+	return controller.NewDeleteServiceController(
+		usecase.NewDeleteServiceUseCase(
+			repository.NewDeleteServiceDatabaseRepository(database),
+		),
+	)
+}
+
+func NewListServicesController(database postgres.Database) contract.ListServicesController {
+	return controller.NewListServicesController(
+		usecase.NewListServicesUseCase(
+			repository.NewListServicesDatabaseRepository(database),
+		),
+	)
+}

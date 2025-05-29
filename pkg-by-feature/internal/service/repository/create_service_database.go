@@ -15,11 +15,13 @@ type createServiceDatabaseRepository struct {
 // Execute implements contract.CreateServiceDatabaseRepository.
 func (repository *createServiceDatabaseRepository) Execute(ctx context.Context, service model.Service) (model.Service, error) {
 	var serviceCreated model.Service
-	query := "INSERT INTO service (name) VALUES ($1) RETURNING *"
+	query := "INSERT INTO service (name, description, price) VALUES ($1, $2, $3) RETURNING id, name, description, price"
 	err := repository.database.QueryRowxContext(
 		ctx,
 		query,
 		service.Name,
+		service.Description,
+		service.Price,
 	).StructScan(&serviceCreated)
 	if err != nil {
 		return model.Service{}, err

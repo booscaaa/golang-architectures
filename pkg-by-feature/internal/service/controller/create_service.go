@@ -2,7 +2,6 @@ package controller
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/booscaaa/clean-go/pkg-by-feature/internal/service/contract"
@@ -17,25 +16,19 @@ type createServiceController struct {
 func (controller *createServiceController) Execute(response http.ResponseWriter, request *http.Request) {
 	ctx := request.Context()
 	var input model.CreateServiceInput
-	err := json.NewDecoder(request.Body).Decode(&input)
-	if err != nil {
-		http.Error(response, err.Error(), http.StatusBadRequest)
+	if err := json.NewDecoder(request.Body).Decode(&input); err != nil {
+		response.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	output, err := controller.createServiceUseCase.Execute(ctx, input)
 	if err != nil {
-		http.Error(response, err.Error(), http.StatusInternalServerError)
+		response.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	fmt.Println(input)
-
-	err = json.NewEncoder(response).Encode(output)
-	if err != nil {
-		http.Error(response, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	response.WriteHeader(http.StatusCreated)
+	json.NewEncoder(response).Encode(output)
 }
 
 func NewCreateServiceController(createServiceUseCase contract.CreateServiceUseCase) contract.CreateServiceController {
