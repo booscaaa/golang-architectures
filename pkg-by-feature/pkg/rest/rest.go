@@ -17,8 +17,14 @@ func Initialize(database postgres.Database) {
 	deleteClientController := di.NewDeleteClientController(database)
 	listClientsController := di.NewListClientsController(database)
 
-	// Other controllers
+	// Product controllers
 	createProductController := di.NewCreateProductController(database)
+	getProductController := di.NewGetProductController(database)
+	updateProductController := di.NewUpdateProductController(database)
+	deleteProductController := di.NewDeleteProductController(database)
+	listProductsController := di.NewListProductsController(database)
+
+	// Other controllers
 	createBudgetController := di.NewCreateBudgetController(database)
 	createServiceController := di.NewCreateServiceController(database)
 
@@ -31,8 +37,14 @@ func Initialize(database postgres.Database) {
 	router.Put("/clients/{id}", updateClientController.Execute)
 	router.Delete("/clients/{id}", deleteClientController.Execute)
 
-	// Other routes
+	// Product routes - CRUD complete
 	router.Post("/products", createProductController.Execute)
+	router.Get("/products", listProductsController.Execute)
+	router.Get("/products/{id}", getProductController.Execute)
+	router.Put("/products/{id}", updateProductController.Execute)
+	router.Delete("/products/{id}", deleteProductController.Execute)
+
+	// Other routes
 	router.Post("/budgets", createBudgetController.Execute)
 	router.Post("/services", createServiceController.Execute)
 
